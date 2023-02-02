@@ -6,7 +6,7 @@
 	<dict>
 		<key>CameraPermissionViewController.nib</key>
 		<data>
-		rZ1aFRUIKZVJhejCO2OpA4YW/AE=
+		ldDPFnBGyxkLNC67wvlS+gOSM7I=
 		</data>
 		<key>CameraViewController.nib/objects-14.0+.nib</key>
 		<data>
@@ -38,11 +38,11 @@
 		</data>
 		<key>EnterNameViewController.nib</key>
 		<data>
-		/PI0/2QnBRnTWK079chfYpgHiUw=
+		F0Rv0iUsQhHbLOosoo0HsSOVQgw=
 		</data>
 		<key>EpisodePlayerViewController.nib</key>
 		<data>
-		fiSj9OhgzfFYz4/AE9YYSqP1rJY=
+		X1XtHk412JFnHuwBPB7RIaUqrYk=
 		</data>
 		<key>ErrorPopupViewController.nib</key>
 		<data>
@@ -54,7 +54,7 @@
 		</data>
 		<key>Headers/wakatoonSDK-Swift.h</key>
 		<data>
-		DvBhRHAbLbrsiaiTxtJOu94gmkY=
+		3hACRYNCHsXtN62hg0KEF24YiPM=
 		</data>
 		<key>Headers/wakatoonSDK.h</key>
 		<data>
@@ -62,7 +62,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		7uG3icGRy3neGGdkH7fN/mXJ6kY=
+		FqJdFAhVy1rrJKumGH4MxBiFmzM=
 		</data>
 		<key>LoaderViewController.nib</key>
 		<data>
@@ -78,43 +78,43 @@
 		</data>
 		<key>Modules/wakatoonSDK.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		1Rn41HBX3zQpbqo5lNNUB4H9MrY=
+		DD7188p8Q2t7AYMh+09qgmWLbw0=
 		</data>
 		<key>Modules/wakatoonSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
-		hOv1INIZGny0Vs6eHgCIRWLcvJU=
+		sG9fYH2Drngs7b6tO6EjS1UPRGg=
 		</data>
 		<key>Modules/wakatoonSDK.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		u2fRGXs7/vsq9Az8UT1HVnapv7w=
+		2bVKzItkkADZlXmVhpeM43Pi5zE=
 		</data>
 		<key>Modules/wakatoonSDK.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		hOv1INIZGny0Vs6eHgCIRWLcvJU=
+		sG9fYH2Drngs7b6tO6EjS1UPRGg=
 		</data>
 		<key>Modules/wakatoonSDK.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		l9UrfJ4rq52TzdXcd+DOeZNV9qg=
+		Wy5iiEhd1DsSzj6hPtK4Ga45vfE=
 		</data>
 		<key>Modules/wakatoonSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		1Rn41HBX3zQpbqo5lNNUB4H9MrY=
+		DD7188p8Q2t7AYMh+09qgmWLbw0=
 		</data>
 		<key>Modules/wakatoonSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
-		cgBDJx204XwWZpZ168yXx7I5RE0=
+		0A+hug6VHn5HHokcNSMSrn2BuUU=
 		</data>
 		<key>Modules/wakatoonSDK.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		AZkEBQDOITnWCTdFmJhPf+at/b0=
+		naRejFIKEUov07Ed52p7NyoVz00=
 		</data>
 		<key>Modules/wakatoonSDK.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		cgBDJx204XwWZpZ168yXx7I5RE0=
+		0A+hug6VHn5HHokcNSMSrn2BuUU=
 		</data>
 		<key>Modules/wakatoonSDK.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		1IS6XLUZxvc6wzGTVkgcfww5BDo=
+		WCCtonWJcZWp+KWtICUcklBNM54=
 		</data>
 		<key>ReplayAndShareViewController.nib</key>
 		<data>
@@ -122,15 +122,15 @@
 		</data>
 		<key>VideoOverviewViewController.nib</key>
 		<data>
-		fTEY/1W+EUjQFyVLf+FBh+MlwrY=
+		TQdhgiUtW4iHQJS7Q743csul6zA=
 		</data>
 		<key>VideoPlayerViewController.nib/objects-14.0+.nib</key>
 		<data>
-		GY6j427BFmyqhZAJ4iL/ZuqNxzk=
+		lOcQFocVm56qt+gK/u3Aux+7xL4=
 		</data>
 		<key>VideoPlayerViewController.nib/runtime.nib</key>
 		<data>
-		XEN17wJNzHICUKZftFZu5IYRkvE=
+		fyDko9aaKDGwRQDX0vvpy+ieoEI=
 		</data>
 		<key>cameraPermission.png</key>
 		<data>
@@ -152,14 +152,31 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			ijNr5sMuUbi0q//PnWz4E5Y7c7g=
+			DE8eK9EjLbBeGT7CDtjt990sERo=
 			</data>
 			<key>optional</key>
 			<true/>
 		</dict>
 		<key>eulaSDKPopUPViewController.nib</key>
 		<data>
-		5BYxk1jbhWd0yMwc7arzT/+KHKM=
+		r0jw4KtbFfB3jodh9dfIQmUgj/A=
+		</data>
+		<key>fr.lproj/Localizable.strings</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			+KyHFVLBSEELgcJCIPALSUG/cVo=
+			</data>
+			<key>optional</key>
+			<true/>
+		</dict>
+		<key>fr_aim_at_your_drawing.wav</key>
+		<data>
+		l8sVyICF7IDLiTR8lLvGeQLv2BE=
+		</data>
+		<key>fr_drawing_not_detected.wav</key>
+		<data>
+		yO8W3sUoBv1ECRQBNU5qlxD8mAc=
 		</data>
 		<key>left-arrow.png</key>
 		<data>
@@ -184,7 +201,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			znrCizdnWTQzzULXaZCl/tvV8IsxVp2kd217WazUgNg=
+			h67O9iXy8DG8o0buyA/caU60LGLVszndOwKpDsncqRY=
 			</data>
 		</dict>
 		<key>CameraViewController.nib/objects-14.0+.nib</key>
@@ -240,14 +257,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			q4C3WXXv4Z+g5aH4EW+9umuMWAxNFMmZ+c6LMukEuhs=
+			q16spyuu78ooas4IdF4nWLTE6o3ZnX81aJ51jxD3eEQ=
 			</data>
 		</dict>
 		<key>EpisodePlayerViewController.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			JqPQoHg+CZLU9e9BYOSK9G7hzQ4+MzR+5J55HAgNpO8=
+			rG4LgulSA3uQXgABfKH1zqwC+g7JyJXwQLZKkuDA6YQ=
 			</data>
 		</dict>
 		<key>ErrorPopupViewController.nib</key>
@@ -268,7 +285,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			GkHsqy8lUn7nLlUdQc5Qf8B8HYgegXurcp97Hd1xF5I=
+			8JDmi9qayJ+pANndWJAAaOgWhgwHOgmVgFkqpCA2ouw=
 			</data>
 		</dict>
 		<key>Headers/wakatoonSDK.h</key>
@@ -303,70 +320,70 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			DfamFrDXV3jAVBLEYzjXEkzCdRCIq5DtgJgJ0pQEcig=
+			nI2RbNB2brQ8bUNixq9LBm5PuKuCyGOyPqBhVSwUJYE=
 			</data>
 		</dict>
 		<key>Modules/wakatoonSDK.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			SYRzUSMfh4l3/aL2IgWoTGv/WuMDfJeYV837XPjYMDY=
+			CMgLn/ElwfYd9r0nh3pd9zitqseXfvASkB4tsbQVrdU=
 			</data>
 		</dict>
 		<key>Modules/wakatoonSDK.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Tz6a4FqzBdjS7aiql541nwclfaZzgUOYyD1HB49x9cI=
+			5lTXEuYm09XR6rgaBPnU495FakCuTQfkRJwtjBU+Jik=
 			</data>
 		</dict>
 		<key>Modules/wakatoonSDK.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			SYRzUSMfh4l3/aL2IgWoTGv/WuMDfJeYV837XPjYMDY=
+			CMgLn/ElwfYd9r0nh3pd9zitqseXfvASkB4tsbQVrdU=
 			</data>
 		</dict>
 		<key>Modules/wakatoonSDK.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ciSKu7yYce37VyY1kfw9rgVHoBxbLvWIUxnefjgcKQ4=
+			c51KsX4HU5c4XX9fMJJwYBJxT1EBWGNkuT2f45QrFXk=
 			</data>
 		</dict>
 		<key>Modules/wakatoonSDK.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			DfamFrDXV3jAVBLEYzjXEkzCdRCIq5DtgJgJ0pQEcig=
+			nI2RbNB2brQ8bUNixq9LBm5PuKuCyGOyPqBhVSwUJYE=
 			</data>
 		</dict>
 		<key>Modules/wakatoonSDK.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			FRBOwH1Z0el0BqP/seHPvBjZmNejrWiI6oLUdODkB+A=
+			mh5h0OM33NYSJfkW4q6IUViU85vJeWDL6hgbpAdzgKQ=
 			</data>
 		</dict>
 		<key>Modules/wakatoonSDK.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			d4JfQWmwRSA0uVCpyvY5VdJAMhR4hgRizdWXltLu76I=
+			VRInT9QlawU3Pnqso5A5P1YGh2HoJ/5KZofp9ucTrcc=
 			</data>
 		</dict>
 		<key>Modules/wakatoonSDK.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			FRBOwH1Z0el0BqP/seHPvBjZmNejrWiI6oLUdODkB+A=
+			mh5h0OM33NYSJfkW4q6IUViU85vJeWDL6hgbpAdzgKQ=
 			</data>
 		</dict>
 		<key>Modules/wakatoonSDK.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			F0KiqXfmqqytjr0OFej97Qi6XliAWE29ccDzevd803s=
+			sOvWH9qU2dtcxUa7zGN99EccTApAt0O/H4nI6pb4lzU=
 			</data>
 		</dict>
 		<key>ReplayAndShareViewController.nib</key>
@@ -380,21 +397,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			pm3YqyPQ23BIHS9/l1bjQRvq2zODnSBymXpwMEy2GpU=
+			qrSEWxcYEQkDK8nLosn3W/oIvUIQfif6pMy0TXB0VlA=
 			</data>
 		</dict>
 		<key>VideoPlayerViewController.nib/objects-14.0+.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			xI5aEIwp3sTGaMTtJM3ayPD4wEvnq6xaQTDasUF3XuA=
+			zqX+G+HLuQXrVsqAa94lilsqs9GNCFkfMnFyxB6NGJc=
 			</data>
 		</dict>
 		<key>VideoPlayerViewController.nib/runtime.nib</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			fSoxRitC0q1kdbzMmT2Tm7+YHhIheroHBevlnYxIBXI=
+			0q1Dz5eGnUnOudCUWgz7uFzTgYcpZwgcnYqsxi7wAlI=
 			</data>
 		</dict>
 		<key>cameraPermission.png</key>
@@ -429,7 +446,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			1yhVb1LOXIvKUpCCiQWyrUMw1UyGd3HLHnY3OD8xaNk=
+			C8IIQAjomaX1D+5nrM3NiwNhSUliX+ZHncObUK0BWxA=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -438,7 +455,30 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			pzNY9PfGYJKEiSDBaHfhlTLQ5IMgAMQRJ0GIoZ+yIy4=
+			yuQi12Wu/ExanU/fGehgsM6syHIq3QBfNij4gnvcacc=
+			</data>
+		</dict>
+		<key>fr.lproj/Localizable.strings</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			JC2nd6dfRamg4zxg7z97n+ZoAp5AoJj/csfs1thLzmU=
+			</data>
+			<key>optional</key>
+			<true/>
+		</dict>
+		<key>fr_aim_at_your_drawing.wav</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			rWnXw16BiMs1EUO2dwBYhFrCSHHWt13uB6hXuj7vrpM=
+			</data>
+		</dict>
+		<key>fr_drawing_not_detected.wav</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			bezqhztlRxRiCQKIpwBygZvM4qvVWD5bQIoDbMQFeOg=
 			</data>
 		</dict>
 		<key>left-arrow.png</key>

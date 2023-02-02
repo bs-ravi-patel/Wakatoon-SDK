@@ -263,6 +263,8 @@ using UInt = size_t;
 
 
 
+
+
 SWIFT_CLASS("_TtC11wakatoonSDK11WakatoonSDK")
 @interface WakatoonSDK : NSObject
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
@@ -530,6 +532,8 @@ using UInt = size_t;
 #endif
 
 #if defined(__OBJC__)
+
+
 
 
 

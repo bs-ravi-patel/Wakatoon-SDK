@@ -17,10 +17,16 @@ public typealias downloadError = (Swift.Error) -> Swift.Void
 @_hasMissingDesignatedInitializers public class WakatoonSDKData {
   @objc deinit
 }
-public enum Language {
+public enum Language : Swift.CaseIterable {
   case en
+  case fr
+  public func description() -> Swift.String
   public static func == (a: wakatoonSDK.Language, b: wakatoonSDK.Language) -> Swift.Bool
   public func hash(into hasher: inout Swift.Hasher)
+  public typealias AllCases = [wakatoonSDK.Language]
+  public static var allCases: [wakatoonSDK.Language] {
+    get
+  }
   public var hashValue: Swift.Int {
     get
   }
@@ -45,6 +51,9 @@ public enum Language {
   public func getTheArtwork(storyID: Swift.String, seasonID: Swift.Int, episodeId: Swift.Int, completion: @escaping ((_ responce: Foundation.Data?, _ error: Swift.Error?) -> ()))
   public func gotoVideoPreview(controller: UIKit.UINavigationController, storyID: Swift.String, seasonID: Swift.Int, episodeId: Swift.Int, totalEpisodes: Swift.Int)
   public func setVideoGeneration(_ set: Swift.Bool)
+  public func getAllSupportedLanguage() -> ([Swift.String], Swift.String)
+  public func setLanguage(_ language: wakatoonSDK.Language)
+  public func setProfileName(name: Swift.String)
   @objc deinit
 }
 public protocol WakatoonSDKDelegate {
