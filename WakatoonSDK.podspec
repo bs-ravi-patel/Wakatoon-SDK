@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
  
   spec.name             = "WakatoonSDK"
-  spec.version          = "1.2"
+  spec.version          = "1.3"
   spec.summary		    = "It is Story Maker xcFramework."
   spec.description      = "It is Story Maker xcFramework with Wakatoon App."			
 
@@ -17,4 +17,3 @@ Pod::Spec.new do |spec|
   spec.ios.deployment_target  = '12.0'
 
 end
-/Users/bs-mac-4/Documents/Ravi Patel/POD TEST/WakatoonApp
