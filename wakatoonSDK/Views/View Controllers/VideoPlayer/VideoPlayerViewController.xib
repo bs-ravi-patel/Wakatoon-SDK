@@ -14,7 +14,8 @@
                 <outlet property="backButton" destination="gAJ-E0-DmX" id="0h1-9l-pGY"/>
                 <outlet property="cameraButton" destination="cyY-TV-TqI" id="dmK-x9-4zj"/>
                 <outlet property="cameraRetakeButton" destination="Ka6-Ah-GZm" id="ZvM-6G-1Im"/>
-                <outlet property="loader" destination="awe-y9-32F" id="79F-xz-ayO"/>
+                <outlet property="loaderView" destination="Kr1-mB-By1" id="BWS-ky-vAt"/>
+                <outlet property="loadingViewText" destination="jri-2s-Uet" id="5MD-Rh-77f"/>
                 <outlet property="playButton" destination="1DC-dx-xma" id="7Z1-P4-KNr"/>
                 <outlet property="playerContainerView" destination="fLJ-4W-Afs" id="gDT-05-HVN"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -28,19 +29,6 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fLJ-4W-Afs">
                     <rect key="frame" x="0.0" y="0.0" width="852" height="393"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                </view>
-                <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="awe-y9-32F" customClass="SpinnerView" customModule="wakatoonSDK" customModuleProvider="target">
-                    <rect key="frame" x="391" y="161.66666666666666" width="70" height="70"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="70" id="QnW-z3-doc"/>
-                        <constraint firstAttribute="width" secondItem="awe-y9-32F" secondAttribute="height" id="Vzz-Gh-Fz8"/>
-                    </constraints>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="color" keyPath="strokeColor">
-                            <color key="value" systemColor="systemTealColor"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1DC-dx-xma">
                     <rect key="frame" x="296.66666666666669" y="320" width="46" height="46"/>
@@ -99,18 +87,49 @@
                         <action selector="cameraAction:" destination="-1" eventType="touchUpInside" id="MB9-RH-GAv"/>
                     </connections>
                 </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kr1-mB-By1">
+                    <rect key="frame" x="0.0" y="0.0" width="852" height="393"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jri-2s-Uet">
+                            <rect key="frame" x="405.33333333333331" y="137.33333333333334" width="41.333333333333314" height="20.333333333333343"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fUU-Ff-1uW" customClass="SpinnerView" customModule="wakatoonSDK" customModuleProvider="target">
+                            <rect key="frame" x="381" y="187.66666666666666" width="90" height="89.999999999999972"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="90" id="l2T-ZO-xcD"/>
+                                <constraint firstAttribute="width" secondItem="fUU-Ff-1uW" secondAttribute="height" id="tP9-lr-5cd"/>
+                            </constraints>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="color" keyPath="strokeColor">
+                                    <color key="value" systemColor="systemTealColor"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" red="0.81176470590000005" green="0.8862745098" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                    <constraints>
+                        <constraint firstItem="jri-2s-Uet" firstAttribute="centerX" secondItem="Kr1-mB-By1" secondAttribute="centerX" id="L4p-YE-Q7g"/>
+                        <constraint firstItem="jri-2s-Uet" firstAttribute="centerY" secondItem="Kr1-mB-By1" secondAttribute="centerY" multiplier="0.75" id="ibT-J7-eVc"/>
+                        <constraint firstItem="fUU-Ff-1uW" firstAttribute="top" secondItem="jri-2s-Uet" secondAttribute="bottom" constant="30" id="tuY-eQ-0ho"/>
+                        <constraint firstItem="fUU-Ff-1uW" firstAttribute="centerX" secondItem="Kr1-mB-By1" secondAttribute="centerX" id="ziw-o4-6kh"/>
+                    </constraints>
+                </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gAJ-E0-DmX">
-                    <rect key="frame" x="25" y="74" width="30" height="30"/>
+                    <rect key="frame" x="25" y="74" width="36" height="36"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="gAJ-E0-DmX" secondAttribute="height" id="MSj-RE-9Ux"/>
-                        <constraint firstAttribute="width" constant="30" id="ZLn-Qo-Dpu"/>
+                        <constraint firstAttribute="width" constant="36" id="ZLn-Qo-Dpu"/>
                     </constraints>
                     <inset key="imageEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
                     <state key="normal" image="left-arrow.png"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                            <real key="value" value="15"/>
+                            <real key="value" value="18"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                     <connections>
@@ -121,17 +140,19 @@
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="awe-y9-32F" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="4Hh-Jo-CgL"/>
                 <constraint firstAttribute="bottom" secondItem="Ka6-Ah-GZm" secondAttribute="bottom" constant="20" id="4NN-7w-myC"/>
                 <constraint firstItem="gAJ-E0-DmX" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="15" id="EsX-cb-MUc"/>
                 <constraint firstItem="cyY-TV-TqI" firstAttribute="width" secondItem="cyY-TV-TqI" secondAttribute="height" id="FXd-ve-4cV"/>
+                <constraint firstItem="Kr1-mB-By1" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Klk-cN-n81"/>
+                <constraint firstAttribute="bottom" secondItem="Kr1-mB-By1" secondAttribute="bottom" id="LXP-9M-yr5"/>
                 <constraint firstItem="cyY-TV-TqI" firstAttribute="centerY" secondItem="Ka6-Ah-GZm" secondAttribute="centerY" id="Nvv-Nz-aEJ"/>
                 <constraint firstItem="Ka6-Ah-GZm" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" multiplier="1.2" id="Pix-zY-ng6"/>
                 <constraint firstItem="fLJ-4W-Afs" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="QGn-bP-ysa"/>
                 <constraint firstItem="1DC-dx-xma" firstAttribute="centerY" secondItem="Ka6-Ah-GZm" secondAttribute="centerY" id="Vyb-OS-AzV"/>
+                <constraint firstItem="Kr1-mB-By1" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="W0l-R5-mH3"/>
                 <constraint firstAttribute="trailing" secondItem="fLJ-4W-Afs" secondAttribute="trailing" id="WWf-sF-MPM"/>
                 <constraint firstItem="Ka6-Ah-GZm" firstAttribute="width" secondItem="Ka6-Ah-GZm" secondAttribute="height" id="ZHd-50-2sH"/>
-                <constraint firstItem="awe-y9-32F" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="hwV-Cw-1dg"/>
+                <constraint firstItem="Kr1-mB-By1" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailing" id="eF5-XW-unI"/>
                 <constraint firstItem="1DC-dx-xma" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" multiplier="0.75" id="ke8-sQ-9uy"/>
                 <constraint firstItem="fLJ-4W-Afs" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="lZO-hp-icX"/>
                 <constraint firstAttribute="bottom" secondItem="fLJ-4W-Afs" secondAttribute="bottom" id="nKQ-mO-gEh"/>

@@ -109,6 +109,26 @@ public class WakatoonSDK: NSObject {
         WakatoonSDKData.shared.isForceVideoGeneration = set
     }
     
+    ///GET all suppotedLanguage of SDK on 0
+    ///GET currentSelected Language of SDK on 1
+    public func getAllSupportedLanguage() -> ([String],String) {
+        var temp = [String]()
+        Language.allCases.forEach({ lang in
+            temp.append(lang.description())
+        })
+        return (temp,WakatoonSDKData.shared.selectedLanguage.description())
+    }
+    
+    ///SET SDK language Defualt will be fr
+    public func setLanguage(_ language: Language) {
+        WakatoonSDKData.shared.selectedLanguage = language
+    }
+    
+    ///SET Profile Name
+    public func setProfileName(name: String) {
+        Common.setPreviousName(name)
+    }
+    
 }
 
 public protocol WakatoonSDKDelegate {

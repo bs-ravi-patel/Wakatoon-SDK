@@ -17,6 +17,7 @@ class EnterNameViewController: BaseViewController {
     @IBOutlet weak var nameTF: UITextField!
     @IBOutlet weak var cancleBtn: UIButton!
     @IBOutlet weak var continueBtn: UIButton!
+    @IBOutlet weak var centerContraint: NSLayoutConstraint!
     
     //MARK: - LIFE CYCLE
     
@@ -25,6 +26,7 @@ class EnterNameViewController: BaseViewController {
         
         setupView()
         addDoneButtonOnKeyboard()
+        nameTF.delegate = self
     }
     
     static func FromStoryBoard() -> Self {
@@ -33,7 +35,7 @@ class EnterNameViewController: BaseViewController {
 
     private func setupView() {
         whoTheArtistLbl.text = "who_the_artist".localized
-        cancleBtn.setTitle("cancle".localized, for: .normal)
+        cancleBtn.setTitle("cancel".localized, for: .normal)
         continueBtn.setTitle("continue".localized, for: .normal)
         if let name = Common.getPreviousName() {
             nameTF.text = name
@@ -44,6 +46,7 @@ class EnterNameViewController: BaseViewController {
     
     //MARK: - BTNS ACTIONS
     @IBAction func btnsActions(_ sender: UIButton) {
+        nameTF.endEditing(true)
         if sender.tag == 0 {
             dismiss(animated: true)
         }else {
@@ -69,6 +72,19 @@ class EnterNameViewController: BaseViewController {
     
     @objc func dismissKeyboard() {
         nameTF.resignFirstResponder()
+    }
+    
+}
+
+extension EnterNameViewController: UITextFieldDelegate {
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        centerContraint.constant = -100
+        return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
+        centerContraint.constant = 0
     }
     
 }

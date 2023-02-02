@@ -20,7 +20,7 @@ public class WakatoonSDKData {
     
     var isDebugEnable: Bool = false
     
-    var selectedLanguage: Language = .en
+    var selectedLanguage: Language = .fr
     var selectedLanguageBundel: Bundle?
     
     let themeColor = UIColor(red: 98/255.0, green: 201/255.0, blue: 200/255.0, alpha: 1.0)
@@ -34,15 +34,21 @@ public class WakatoonSDKData {
     var nextEpisodeDelegate: NextPlayEpisodeDelegate?
     
     var isForceVideoGeneration: Bool = false
+    
+    let termsURL = "https://www.wakatoon.com/fr/mentions-legales"
+    let privacyPolicyURL = "https://www.wakatoon.com/fr/politique-de-confidentialité/"
 }
 
-public enum Language {
+public enum Language : CaseIterable {
     case en
+    case fr
     
-    func description() -> String {
+    public func description() -> String {
         switch self {
             case .en:
                 return "en"
+            case .fr:
+                return "fr"
         }
     }
 }

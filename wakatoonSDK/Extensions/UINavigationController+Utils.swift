@@ -10,7 +10,7 @@ import UIKit
 
 
 extension UINavigationController {
-    func popToViewController(ofClass: AnyClass, animated: Bool = true) {
+    func popToViewController(ofClass: AnyClass, animated: Bool = false) {
         if let vc = viewControllers.last(where: { $0.isKind(of: ofClass) }) {
             popToViewController(vc, animated: animated)
         }
@@ -18,7 +18,7 @@ extension UINavigationController {
     func containsViewController(ofKind kind: AnyClass) -> Bool {
         return self.viewControllers.contains(where: { $0.isKind(of: kind) })
     }
-    func popBack(_ count: Int, animated: Bool = true) {
+    func popBack(_ count: Int, animated: Bool = false) {
         let viewControllers: [UIViewController] = self.viewControllers
         guard viewControllers.count < count else {
             self.popToViewController(viewControllers[viewControllers.count - count], animated: animated)

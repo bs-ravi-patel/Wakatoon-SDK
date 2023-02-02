@@ -59,9 +59,12 @@ class ExtractionOKViewController: BaseViewController {
                 DispatchQueue.main.async {
                     if sender.tag == 0 {
                         self.hideLoader()
+                        NotificationCenter.default.post(name: NSNotification.Name("PLAY_CAMERA_DEFUALT_SOUND"), object: nil)
                         self.navigationController?.popToViewController(ofClass: CameraViewController.self)
                     }else {
                         VideoCatchModel().removeCatchVideo(.DETECTED_LOOP_DATA)
+                        VideoCatchModel().removeCatchVideo(.DETECTED_DATA)
+                        EpisodeDrawnModel().setEpisodeDrawn(true)
                         var extractionValidateModal: ExtractImageValidateModal?
                         extractionValidateModal = Common.decodeDataToObject(data: response)
                         if let _ = extractionValidateModal?.photoId {
@@ -73,7 +76,7 @@ class ExtractionOKViewController: BaseViewController {
                                 NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: "NEW_IMAGE_SELECT")))
                                 loadingVC.popViewController(animated: false)
                                 let videoOverViewVC = VideoOverviewViewController.FromStoryBoard()
-                                videoOverViewVC.videoModal = VideoGenModal(videoUrl: url, videoPlayabilityProgress: nil, videoGenerationProgress: nil, videoId: nil, loopTimecode: loopTime)
+                                videoOverViewVC.videoModal = VideoGenModal(videoUrl: url, loopTimecode: loopTime)
                                 self.pushViewController(view: videoOverViewVC)
                                 Common.downloadEpisodeFromURL(url, isFor: .DETECTED, loopTimecode: loopTime)
                             }

@@ -21,6 +21,8 @@ class VideoPlayerViewController: BaseViewController {
     }
     private var player: AVPlayer?
     private var playerLayer: AVPlayerLayer?
+    private var isIntroVideoFirstTime: Bool = true
+    var isFirstTime: Bool = true
     
     //MARK: - OUTLETS
     @IBOutlet weak var playerContainerView: UIView!
@@ -28,7 +30,8 @@ class VideoPlayerViewController: BaseViewController {
     @IBOutlet weak var cameraRetakeButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var cameraButton: UIButton!
-    @IBOutlet weak var loader: SpinnerView!
+    @IBOutlet weak var loaderView: UIView!
+    @IBOutlet weak var loadingViewText: UILabel!
     
     //MARK: - LIFE CYCLE
     
@@ -37,12 +40,15 @@ class VideoPlayerViewController: BaseViewController {
         
         // Do any additional setup after loading the view.
         WakatoonSDKData.shared.nextEpisodeDelegate = self
-        setupView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         if let player = player, !player.isPlaying {
+            player.seek(to: .zero)
             player.play()
+            self.isIntroVideoFirstTime = false
+        } else {
+            setupView()
         }
     }
     
@@ -62,17 +68,18 @@ class VideoPlayerViewController: BaseViewController {
     }
     
     private func setupView() {
+        loadingViewText.text = "video_loading_text".localized
+        loadingViewText.font = getFont(size: 17, style: .Medium)
         backButton.setBackButtonLayout(viewController: self)
         if isScreenFor == .INTRO {
             playButton.isHidden = true
             cameraRetakeButton.isHidden = true
             cameraButton.isHidden = false
-            loader.isHidden = false
             let catchResult = VideoCatchModel().isIntroCatched()
             if catchResult.0, let catchURL = catchResult.1, !WakatoonSDKData.shared.isForceVideoGeneration {
-                self.videoModal = VideoGenModal(videoUrl: catchURL, videoPlayabilityProgress: nil, videoGenerationProgress: nil, videoId: nil, loopTimecode: catchResult.2)
-                loader.isHidden = true
+                self.videoModal = VideoGenModal(videoUrl: catchURL, loopTimecode: catchResult.2)
             } else {
+                loaderView.isHidden = false
                 DispatchQueue.global(qos: .background).async {
                     self.createVideo(isForceGen: true, lable: .INTRO)
                 }
@@ -81,7 +88,6 @@ class VideoPlayerViewController: BaseViewController {
             playButton.isHidden = false
             cameraRetakeButton.isHidden = false
             cameraButton.isHidden = true
-            loader.isHidden = false
             let playImage = UIImage(named: "play", in: Bundle(for: type(of: self)), compatibleWith: nil)?.imageWithColor(color: .systemTeal)
             playButton.setImage(playImage, for: .normal)
             playButton.setImage(playImage, for: .highlighted)
@@ -90,23 +96,22 @@ class VideoPlayerViewController: BaseViewController {
             cameraRetakeButton.setImage(cam_retake, for: .highlighted)
             let catchResult = VideoCatchModel().isVideoCatched(.DETECTED_LOOP_DATA)
             if catchResult.0, let catchURL = catchResult.1, !WakatoonSDKData.shared.isForceVideoGeneration {
-                self.videoModal = VideoGenModal(videoUrl: catchURL, videoPlayabilityProgress: nil, videoGenerationProgress: nil, videoId: nil, loopTimecode: catchResult.2)
-                loader.isHidden = true
+                self.videoModal = VideoGenModal(videoUrl: catchURL, loopTimecode: catchResult.2)
             } else {
+                loaderView.isHidden = false
                 DispatchQueue.global(qos: .background).async {
                     self.createVideo(isForceGen: true, lable: .DETECTED_LOOP)
                 }
             }
         }
         NotificationCenter.default.addObserver(forName: NSNotification.Name("NEW_IMAGE_SELECT"), object: nil, queue: .main) { _ in
-            if self.isScreenFor == .DETECTED_LOOP {
-                DispatchQueue.global(qos: .background).async {
-                    self.player = nil
-                    self.playerContainerView.layer.sublayers?.forEach({ layer in
-                        layer.removeFromSuperlayer()
-                    })
-                    self.createVideo(isForceGen: true, lable: .DETECTED_LOOP)
-                }
+                self.player = nil
+                self.playerContainerView.layer.sublayers?.forEach({ layer in
+                    layer.removeFromSuperlayer()
+                })
+            self.isScreenFor = .DETECTED_LOOP
+            DispatchQueue.global(qos: .background).async {
+                self.createVideo(isForceGen: true, lable: .DETECTED_LOOP)
             }
         }
     }
@@ -124,7 +129,7 @@ class VideoPlayerViewController: BaseViewController {
             }
         }
     }
-
+    
     @IBAction func cameraRetakeAction(_ sender: UIButton) {
         Common.isCameraPermissionGranted { isGranted in
             DispatchQueue.main.async {
@@ -140,7 +145,29 @@ class VideoPlayerViewController: BaseViewController {
     }
     
     @IBAction func playAction(_ sender: UIButton) {
-        gotoEnterNameViewController()
+        let result = VideoCatchModel().isVideoCatched(.EPISODE_DATA)
+        if result.0, let url = result.1 {
+            let episodePlayerVC = EpisodePlayerViewController.FromStoryBoard()
+            episodePlayerVC.videoUrlStr = url
+            episodePlayerVC.isSetOnlyUserName = false
+            self.pushViewController(view: episodePlayerVC)
+        } else if let userName = VideoCatchModel().getEpisodeArtistName() {
+            self.isFirstTime = true
+            let loadingVC = LoadingViewController.FromStoryBoard()
+            loadingVC.name = userName
+            loadingVC.isForPrepareEpisode = true
+            loadingVC.loadingTitle = "preparing_your_cartoon".localized
+            loadingVC.overviewVideoCreate = { url, loopTime in
+                loadingVC.popViewController(animated: false)
+                let episodePlayerVC = EpisodePlayerViewController.FromStoryBoard()
+                episodePlayerVC.videoUrlStr = url
+                self.pushViewController(view: episodePlayerVC)
+                self.catchVideo(urlString: url, isFor: .EPISODE, loopTimecode: loopTime)
+            }
+            self.pushViewController(view: loadingVC)
+        } else {
+            gotoEnterNameViewController()
+        }
     }
     
     @IBAction func backAction(_ sender: UIButton) {
@@ -152,15 +179,7 @@ class VideoPlayerViewController: BaseViewController {
     private func setupPlayer() {
         if let viewController = UIViewController.topMostViewController(), viewController.isKind(of: VideoPlayerViewController.self) {
             guard let videoUrlStr = videoModal?.videoUrl , let url = URL(string: videoUrlStr) else {return}
-            
-            if let loopTime = videoModal?.loopTimecodeSecond() {
-                let playerItem = AVPlayerItem(url: url)
-                playerItem.forwardPlaybackEndTime = CMTimeMake(value: Int64(loopTime), timescale: 1)
-                player = AVPlayer(playerItem: playerItem)
-            } else {
-                player = AVPlayer(url: url)
-            }
-            
+            player = AVPlayer(url: url)
             playerLayer = AVPlayerLayer(player: player)
             playerContainerView.layer.sublayers?.forEach({ layer in
                 layer.removeFromSuperlayer()
@@ -171,15 +190,37 @@ class VideoPlayerViewController: BaseViewController {
             playerLayer?.videoGravity = .resizeAspect
             playerContainerView.layoutIfNeeded()
             playerLayer?.layoutIfNeeded()
-            
             player?.play()
+            
+            
+            if !loaderView.isHidden {
+                Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+                    if let layer = self.playerLayer, layer.isReadyForDisplay {
+                        self.loaderView.isHidden = true
+                        timer.invalidate()
+                    }
+                }
+            }
+            
+            self.isIntroVideoFirstTime = false
             NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem, queue: .main) { [weak self] _ in
-                self?.player?.seek(to: CMTime.zero)
-                self?.player?.play()
+                if self?.isScreenFor == .INTRO && self?.isIntroVideoFirstTime == true {
+                    self?.isIntroVideoFirstTime = false
+                    self?.setupPlayer()
+                } else if let loopTime = self?.videoModal?.loopTimecodeSecond() {
+                    self?.player?.seek(to: CMTime(seconds: Double(loopTime), preferredTimescale: 6000))
+                    self?.player?.play()
+                    self?.isIntroVideoFirstTime = false
+                } else {
+                    self?.player?.seek(to: CMTime(seconds: 0, preferredTimescale: 6000))
+                    self?.player?.play()
+                    self?.isIntroVideoFirstTime = false
+                }
             }
             NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [self] _ in
                 if let player = player, !player.isPlaying, self.navigationController?.topViewController == self {
                     player.play()
+                    self.isIntroVideoFirstTime = false
                 }
             }
         } else {
@@ -192,7 +233,6 @@ class VideoPlayerViewController: BaseViewController {
         NotificationCenter.default.removeObserver(self, name:UIApplication.willEnterForegroundNotification, object: nil)
     }
     
-
     private func catchVideo(urlString: String, isFor: APIManager.VideoLabel, loopTimecode: String?) {
         Common.downloadEpisodeFromURL(urlString, isFor: isFor, loopTimecode: loopTimecode)
     }
@@ -200,6 +240,7 @@ class VideoPlayerViewController: BaseViewController {
     private func gotoEnterNameViewController() {
         let enterNameVC = EnterNameViewController.FromStoryBoard()
         enterNameVC.name = { name in
+            self.isFirstTime = true
             let loadingVC = LoadingViewController.FromStoryBoard()
             loadingVC.isForPrepareEpisode = true
             loadingVC.name = name
@@ -223,14 +264,13 @@ class VideoPlayerViewController: BaseViewController {
 extension VideoPlayerViewController {
     
     private func createVideo(isForceGen: Bool? = nil, lable: APIManager.VideoLabel, name: String? = nil) {
-        APIManager.shared.getVideo(isForceGen: isForceGen, label: lable, name: name) { response, error in
+        APIManager.shared.getVideo(label: lable, name: name) { response, error in
             DispatchQueue.main.async {
                 if let response = response {
                     let model:VideoGenModal? = Common.decodeDataToObject(data: response)
                     if model?.videoUrl != nil, let genPercent = model?.videoPlayabilityProgress {
                         let value = Int(round(genPercent * 100))
                         if value == 100 {
-                            self.loader.isHidden = true
                             self.videoModal = model
                             self.catchVideo(urlString: model?.videoUrl ?? "", isFor: lable, loopTimecode: model?.loopTimecode)
                         }else {
@@ -256,7 +296,8 @@ extension VideoPlayerViewController: NextPlayEpisodeDelegate {
     func playNextEpisode() {
         self.navigationController?.popToViewController(ofClass: VideoPlayerViewController.self, animated: false)
         WakatoonSDKData.shared.currentEpisodeID += 1
-        loader.isHidden = false
+        loaderView.isHidden = false
+        self.isIntroVideoFirstTime = true
         self.isScreenFor = EpisodeDrawnModel().isEpisodeDrawn() ? .DETECTED_LOOP : .INTRO
         self.player = nil
         self.playerContainerView.layer.sublayers?.forEach({ layer in
@@ -271,6 +312,7 @@ extension VideoPlayerViewController: NextPlayEpisodeDelegate {
             if let player = self.player {
                 player.seek(to: .zero)
                 player.play()
+                self.isIntroVideoFirstTime = false
             }
         } else if self.isScreenFor == .INTRO {
             self.player = nil

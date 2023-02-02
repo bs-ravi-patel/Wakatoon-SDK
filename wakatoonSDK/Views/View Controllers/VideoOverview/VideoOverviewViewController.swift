@@ -10,9 +10,10 @@ import MediaPlayer
 
 
 class VideoOverviewViewController: BaseViewController {
-
+    
     //MARK: - VARIABLES
-    var player: AVPlayer?
+    private var player: AVPlayer?
+    private var playerLayer: AVPlayerLayer?
     var isEpisodeDrwan:Bool = false
     var isRetakeImage: Bool = false
     var videoModal: VideoGenModal?
@@ -39,6 +40,24 @@ class VideoOverviewViewController: BaseViewController {
         retakeBtn.setImage(cam_retake, for: .highlighted)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        if let player = player, !player.isPlaying {
+            player.play()
+        } else if player == nil {
+            let result = VideoCatchModel().isVideoCatched(.DETECTED_DATA)
+            if result.0, let url = result.1, let loopTime = result.2 {
+                self.videoModal = VideoGenModal(videoUrl: url, loopTimecode: loopTime)
+            }
+            setupPlayer()
+        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        DispatchQueue.main.async { [self] in
+            playerLayer?.frame = playerContainerView.bounds
+        }
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         player?.pause()
         player = nil
@@ -57,6 +76,7 @@ class VideoOverviewViewController: BaseViewController {
     
     @IBAction func retakeImageAction(_ sender: UIButton) {
         removePlayerNotifations()
+        NotificationCenter.default.post(name: NSNotification.Name("PLAY_CAMERA_DEFUALT_SOUND"), object: nil)
         self.navigationController?.popToViewController(ofClass: CameraViewController.self)
     }
     
@@ -68,27 +88,34 @@ class VideoOverviewViewController: BaseViewController {
     //MARK: - SETUP PLAYER
     private func setupPlayer() {
         guard let videoUrlStr = videoModal?.videoUrl, let url = URL(string: videoUrlStr) else {return}
-        let playerItem = AVPlayerItem(url: url)
-        if let loopTime = videoModal?.loopTimecodeSecond() {
-            playerItem.forwardPlaybackEndTime = CMTimeMake(value: Int64(loopTime), timescale: 1)
-        }
-        player = AVPlayer(playerItem: playerItem)
-        let playerLayer = AVPlayerLayer(player: player)
-        playerContainerView.layer.addSublayer(playerLayer)
-        playerLayer.frame = playerContainerView.bounds
-        playerLayer.videoGravity = .resizeAspect
+        player = AVPlayer(url: url)
+        playerLayer?.removeFromSuperlayer()
+        playerLayer = AVPlayerLayer(player: player)
+        playerContainerView.layer.addSublayer(playerLayer ?? AVPlayerLayer())
+        playerLayer?.frame = playerContainerView.frame
+        playerLayer?.frame.origin = .zero
+        playerLayer?.videoGravity = .resizeAspect
+        playerContainerView.layoutIfNeeded()
+        playerLayer?.layoutIfNeeded()
+        
         player?.play()
-        addPlayerNotifications()
-    }
-    
-    private func addPlayerNotifications() {
+        
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem, queue: .main) { [weak self] _ in
-            self?.player?.seek(to: CMTime.zero)
+            if let loopTime = self?.videoModal?.loopTimecodeSecond() {
+                self?.player?.seek(to: CMTime(seconds: Double(loopTime), preferredTimescale: 6000))
+            } else {
+                self?.player?.seek(to: CMTime(seconds: Double(0), preferredTimescale: 6000))
+            }
             self?.player?.play()
         }
-        NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [self] _ in
-            if let player = player, !player.isPlaying, self.navigationController?.topViewController == self {
-                player.play()
+        NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
+            if self?.navigationController?.topViewController == self {
+                if let loopTime = self?.videoModal?.loopTimecodeSecond() {
+                    self?.player?.seek(to: CMTime(seconds: Double(loopTime), preferredTimescale: 6000))
+                } else {
+                    self?.player?.seek(to: CMTime(seconds: Double(0), preferredTimescale: 6000))
+                }
+                self?.player?.play()
             }
         }
     }

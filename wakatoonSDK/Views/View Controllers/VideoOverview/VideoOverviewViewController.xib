@@ -28,17 +28,17 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nrp-eH-3On">
-                    <rect key="frame" x="25" y="74" width="30" height="30"/>
+                    <rect key="frame" x="25" y="74" width="36" height="36"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="Nrp-eH-3On" secondAttribute="height" id="NsQ-AS-Ah9"/>
-                        <constraint firstAttribute="width" constant="30" id="X95-ht-Lhn"/>
+                        <constraint firstAttribute="width" constant="36" id="X95-ht-Lhn"/>
                     </constraints>
                     <inset key="imageEdgeInsets" minX="8" minY="8" maxX="8" maxY="8"/>
                     <state key="normal" image="left-arrow.png"/>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                            <real key="value" value="15"/>
+                            <real key="value" value="18"/>
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                     <connections>

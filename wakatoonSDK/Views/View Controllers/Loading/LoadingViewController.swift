@@ -17,6 +17,7 @@ class LoadingViewController: BaseViewController {
             }
         }
     }
+    var originalImage: UIImage?
     var loadingTitle = String()
     var extractedImageModel:ExtractImageModal?
     var extractImageGet: ((_ extractedImageModel: ExtractImageModal?)->())?
@@ -37,6 +38,7 @@ class LoadingViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.post(name: NSNotification.Name("STOP_CAMERA_DEFUALT_SOUND"), object: nil)
         setupView()
     }
     
@@ -52,12 +54,12 @@ class LoadingViewController: BaseViewController {
         if isForPrepareCartoonOverview {
             percentLbl.isHidden = false
             percentLbl.text = "0 %"
-            createVideo(isFormGen: true, lable: .DETECTED)
+            createVideo(lable: .DETECTED)
         }
         if isForPrepareEpisode {
             percentLbl.isHidden = false
             percentLbl.text = "0 %"
-            createVideo(isFormGen: true, lable: .EPISODE, name: name)
+            createVideo(lable: .EPISODE, name: name)
         }
     }
     
@@ -69,43 +71,32 @@ extension LoadingViewController {
     
     private func extractImageAPICall() {
         guard let captureImage = captureImage else {return}
-        APIManager.shared.getExtractedImage(image: captureImage) { response, error in
-            if let response = response {
-                self.extractedImageModel = Common.decodeDataToObject(data: response)
-                if let isSuccess = self.extractedImageModel?.extractionSucceeded, isSuccess {
-                    DispatchQueue.main.async {
-                        self.extractImageGet?(self.extractedImageModel)
+        APIManager.shared.getExtractedImage(image: captureImage, originalImage: self.originalImage) { response, error in
+            DispatchQueue.main.async {
+                if let response = response {
+                    self.extractedImageModel = Common.decodeDataToObject(data: response)
+                    if let isSuccess = self.extractedImageModel?.extractionSucceeded, isSuccess {
+                        let extractionOKVC = ExtractionOKViewController.FromStoryBoard()
+                        extractionOKVC.extractedImageModel = self.extractedImageModel
+                        self.pushViewController(view: extractionOKVC, animated: true)
+                    } else {
+                        if let extractImageGet = self.extractImageGet {
+                            extractImageGet(nil)
+                        }
+                        self.popViewController()
                     }
                 } else {
-                    let error = ErrorModel(errorMessage: "artwork_not_found".localized, errorType: "artwork_error".localized)
-                    DispatchQueue.main.async {
-                        self.showErrorPopUP(errorModel: error,isCancleShow: false, isRetryShow: true, retry: {
-                            self.popViewController()
-                        })
+                    if let extractImageGet = self.extractImageGet {
+                        extractImageGet(nil)
                     }
-                }
-            } else {
-                if let error = error as? NSError {
-                    let userInfo = error.userInfo
-                    var error = userInfo["error"] as? ErrorModel
-                    if let errorType = error?.errorType, errorType == "ArtworkExtractionError" {
-                        error?.errorType = "artwork_extraction_error".localized
-                    }else {
-                        error?.errorType = "artwork_error".localized
-                    }
-                    error?.errorMessage = "artwork_not_found".localized
-                    DispatchQueue.main.async {
-                        self.showErrorPopUP(errorModel: error,isCancleShow: false, isRetryShow: true, retry: {
-                            self.popViewController()
-                        })
-                    }
+                    self.popViewController()
                 }
             }
         }
     }
     
-    private func createVideo(isFormGen: Bool? = nil, lable: APIManager.VideoLabel, name: String? = nil) {
-        APIManager.shared.getVideo(isForceGen: isFormGen, label: lable, name: name) { response, error in
+    private func createVideo(lable: APIManager.VideoLabel, name: String? = nil) {
+        APIManager.shared.getVideo(label: lable, name: name) { response, error in
             if let response = response {
                 self.videoModal = Common.decodeDataToObject(data: response)
                 if let url = self.videoModal?.videoUrl, let genPercent = self.videoModal?.videoPlayabilityProgress {

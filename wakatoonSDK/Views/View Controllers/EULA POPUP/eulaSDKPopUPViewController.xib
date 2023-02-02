@@ -11,7 +11,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="eulaSDKPopUPViewController" customModule="wakatoonSDK" customModuleProvider="target">
             <connections>
+                <outlet property="backBtn" destination="YVV-8M-2Wx" id="jYf-T8-IGh"/>
                 <outlet property="checkUncheckBtn" destination="82W-9b-MOH" id="VIy-5y-bR4"/>
+                <outlet property="continueBtn" destination="v2d-fO-SEZ" id="AAJ-DV-VFX"/>
                 <outlet property="descLbl" destination="PQu-Vf-ekJ" id="0cC-PA-zOo"/>
                 <outlet property="termsLbl" destination="1vG-1C-eAr" id="OkW-o1-xYp"/>
                 <outlet property="titleLbl" destination="R4l-m2-Uef" id="Lde-sU-ugN"/>
@@ -46,7 +48,7 @@
                                 </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lorme ipsum Lorme ipsum Lorme ipsum Lorme ipsum Lorme ipsum Lorme ipsum Lorme ipsum Lorme ipsum" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PQu-Vf-ekJ">
+                        <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lorme ipsum Lorme ipsum Lorme ipsum Lorme ipsum Lorme ipsum Lorme ipsum Lorme ipsum Lorme ipsum" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PQu-Vf-ekJ">
                             <rect key="frame" x="33.666666666666686" y="85" width="267" height="43"/>
                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                             <nil key="textColor"/>

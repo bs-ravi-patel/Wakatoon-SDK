@@ -22,6 +22,10 @@ class BaseViewController: UIViewController {
         setDeviceOrientation(orientation: .landscapeRight)
     }
     
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .landscapeRight
+    }
+    
     @objc func canRotate() -> Void {}
     
 }

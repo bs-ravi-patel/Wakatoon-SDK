@@ -17,6 +17,7 @@ struct VideoCatchModel: Codable {
     var episodeId: Int?
     var savedURLString: String?
     var loopTimecode: String?
+    var userName: String?
     
     static func == (lhs: VideoCatchModel, rhs: VideoCatchModel) -> Bool {
         return (lhs.userID == rhs.userID && lhs.profileID == rhs.profileID && lhs.storyID == rhs.storyID && lhs.seasonID == rhs.seasonID && lhs.episodeId == rhs.episodeId)
@@ -37,13 +38,13 @@ struct VideoCatchModel: Codable {
 //MARK: - DETECTED_LOOP VIDEO
 extension VideoCatchModel {
     
-    func isVideoCatched(_ catchFor: CatchFor) -> (Bool,String?,String?) {
+    func isVideoCatched(_ catchFor: CatchFor) -> (Bool, String?, String?) {
         if let episodeCatchModelArr: [VideoCatchModel] = UserDefaults.standard.getObject(forKey: catchFor.rawValue), let catchModel = episodeCatchModelArr.filter({ model in
             return (model.userID == WakatoonSDKData.shared.USER_ID && model.profileID == WakatoonSDKData.shared.PROFILE_ID && model.storyID == WakatoonSDKData.shared.currentStoryID && model.seasonID == WakatoonSDKData.shared.currentSeasonID && model.episodeId == WakatoonSDKData.shared.currentEpisodeID)
         }).first, let catchURLString = catchModel.savedURLString {
-            return (true,catchURLString,catchModel.loopTimecode)
+            return (true, catchURLString, catchModel.loopTimecode)
         } else {
-            return (false,nil,nil)
+            return (false, nil, nil)
         }
     }
     
@@ -55,14 +56,25 @@ extension VideoCatchModel {
                 var oldModel = episodeCatchModelArr[index]
                 oldModel.savedURLString = self.savedURLString
                 oldModel.loopTimecode = loopTimecode
+                if catchFor == .EPISODE_DATA {
+                    oldModel.userName = Common.getPreviousName()
+                }
                 episodeCatchModelArr[index] = oldModel
                 UserDefaults.standard.save(episodeCatchModelArr, forKey: catchFor.rawValue)
             } else {
-                episodeCatchModelArr.append(VideoCatchModel(userID: WakatoonSDKData.shared.USER_ID, profileID: WakatoonSDKData.shared.PROFILE_ID, storyID: WakatoonSDKData.shared.currentStoryID, seasonID: WakatoonSDKData.shared.currentSeasonID, episodeId: WakatoonSDKData.shared.currentEpisodeID, savedURLString: savedURLString, loopTimecode: loopTimecode))
+                var videoCatchModel = VideoCatchModel(userID: WakatoonSDKData.shared.USER_ID, profileID: WakatoonSDKData.shared.PROFILE_ID, storyID: WakatoonSDKData.shared.currentStoryID, seasonID: WakatoonSDKData.shared.currentSeasonID, episodeId: WakatoonSDKData.shared.currentEpisodeID, savedURLString: savedURLString, loopTimecode: loopTimecode)
+                if catchFor == .EPISODE_DATA {
+                    videoCatchModel.userName = Common.getPreviousName()
+                }
+                episodeCatchModelArr.append(videoCatchModel)
                 UserDefaults.standard.save(episodeCatchModelArr, forKey: catchFor.rawValue)
             }
         } else {
-            UserDefaults.standard.save([VideoCatchModel(userID: WakatoonSDKData.shared.USER_ID, profileID: WakatoonSDKData.shared.PROFILE_ID, storyID: WakatoonSDKData.shared.currentStoryID, seasonID: WakatoonSDKData.shared.currentSeasonID, episodeId: WakatoonSDKData.shared.currentEpisodeID, savedURLString: savedURLString, loopTimecode: loopTimecode)], forKey: catchFor.rawValue)
+            var videoCatchModel = VideoCatchModel(userID: WakatoonSDKData.shared.USER_ID, profileID: WakatoonSDKData.shared.PROFILE_ID, storyID: WakatoonSDKData.shared.currentStoryID, seasonID: WakatoonSDKData.shared.currentSeasonID, episodeId: WakatoonSDKData.shared.currentEpisodeID, savedURLString: savedURLString, loopTimecode: loopTimecode)
+            if catchFor == .EPISODE_DATA {
+                videoCatchModel.userName = Common.getPreviousName()
+            }
+            UserDefaults.standard.save([videoCatchModel], forKey: catchFor.rawValue)
         }
     }
     
@@ -75,6 +87,15 @@ extension VideoCatchModel {
                 UserDefaults.standard.save(episodeCatchModelArr, forKey: catchFor.rawValue)
             }
         }
+    }
+    
+    func getEpisodeArtistName(_ catchFor: CatchFor = .EPISODE_DATA) -> String? {
+        if let episodeCatchModelArr: [VideoCatchModel] = UserDefaults.standard.getObject(forKey: catchFor.rawValue), let catchModel = episodeCatchModelArr.filter({ model in
+            return (model.userID == WakatoonSDKData.shared.USER_ID && model.profileID == WakatoonSDKData.shared.PROFILE_ID && model.storyID == WakatoonSDKData.shared.currentStoryID && model.seasonID == WakatoonSDKData.shared.currentSeasonID && model.episodeId == WakatoonSDKData.shared.currentEpisodeID)
+        }).first, let userName = catchModel.userName {
+            return userName
+        }
+        return nil
     }
     
 }

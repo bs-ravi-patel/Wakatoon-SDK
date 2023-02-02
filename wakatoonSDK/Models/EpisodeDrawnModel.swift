@@ -57,7 +57,7 @@ struct EpisodeDrawnModel: Codable {
                 }
             } else {
                 episodeDrawnArr.append(self.getCurrentEpisodeDetails())
-                UserDefaults.standard.save([self.getCurrentEpisodeDetails()], forKey: "EPISODE_DRAWN")
+                UserDefaults.standard.save(episodeDrawnArr, forKey: "EPISODE_DRAWN")
             }
         } else {
             UserDefaults.standard.save([self.getCurrentEpisodeDetails()], forKey: "EPISODE_DRAWN")

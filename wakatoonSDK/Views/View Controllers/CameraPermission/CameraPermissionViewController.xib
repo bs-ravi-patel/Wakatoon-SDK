@@ -31,7 +31,6 @@
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cameraPermission.png" translatesAutoresizingMaskIntoConstraints="NO" id="f3l-NO-ACr">
                     <rect key="frame" x="341" y="103.66666666666669" width="130" height="130"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="130" id="DON-YP-6rd"/>
                         <constraint firstAttribute="width" secondItem="f3l-NO-ACr" secondAttribute="height" id="G5a-Cj-jZ0"/>
                     </constraints>
                 </imageView>
@@ -72,6 +71,7 @@
                 <constraint firstItem="iHX-Ai-FRw" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="9JR-dm-IWx"/>
                 <constraint firstItem="f3l-NO-ACr" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Rqk-Se-0pk"/>
                 <constraint firstItem="muh-oG-301" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="25" id="V1g-nF-dK1"/>
+                <constraint firstItem="f3l-NO-ACr" firstAttribute="height" secondItem="i5M-Pr-FkT" secondAttribute="height" multiplier="0.346667" id="Zsv-xr-kwc"/>
                 <constraint firstItem="iHX-Ai-FRw" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" multiplier="0.7" id="d5x-Ui-7gP"/>
                 <constraint firstItem="f3l-NO-ACr" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" multiplier="0.9" id="d6m-lC-Q93"/>
                 <constraint firstItem="muh-oG-301" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" multiplier="0.7" id="no3-qy-WTY"/>
@@ -83,7 +83,7 @@
         </view>
     </objects>
     <resources>
-        <image name="cameraPermission.png" width="552" height="482"/>
+        <image name="cameraPermission.png" width="1024" height="1024"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

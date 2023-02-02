@@ -12,16 +12,16 @@ import UIKit
 extension UIViewController {
     
     /// POP UIViewController with animated on/off
-    func popViewController(animated: Bool = true) {
+    func popViewController(animated: Bool = false) {
         self.navigationController?.popViewController(animated: animated)
     }
     
-    @objc func popViewControllerNav(animated: Bool = true) {
-        self.navigationController?.popViewController(animated: true)
+    @objc func popViewControllerNav(animated: Bool = false) {
+        self.navigationController?.popViewController(animated: false)
     }
     
     /// Push UIViewController with animated on/off
-    func pushViewController(view: UIViewController, animated: Bool = true) {
+    func pushViewController(view: UIViewController, animated: Bool = false) {
         self.navigationController?.pushViewController(view, animated: animated)
     }
     
@@ -51,13 +51,14 @@ extension UIViewController {
         traitCollection.userInterfaceStyle == .dark
     }
  
-    func setDeviceOrientation(orientation: UIInterfaceOrientationMask) {
+    func setDeviceOrientation(orientation: UIInterfaceOrientationMask = .landscapeRight) {
         if #available(iOS 16.0, *) {
             let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
             windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientation))
         } else {
             UIDevice.current.setValue(orientation.toUIInterfaceOrientation.rawValue, forKey: "orientation")
         }
+        UINavigationController.attemptRotationToDeviceOrientation()
     }
     
     static func topMostViewController() -> UIViewController? {

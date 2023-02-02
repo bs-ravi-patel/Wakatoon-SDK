@@ -12,6 +12,7 @@ class ReplayAndShareViewController: BaseViewController {
     //MARK: - VARIABLES
     var replayCallback: (()->())?
     var nextEpisodeCallback: (()->())?
+    var closeCallback: (()->())?
     
     //MARK: - OUTLETS
     @IBOutlet weak var closeBtn: UIButton!
@@ -52,21 +53,21 @@ class ReplayAndShareViewController: BaseViewController {
     
     //MARK: - BTNS ACTIONS
     @IBAction func closeBtnAction(_ sender: UIButton) {
-        dismiss(animated: true)
+        guard let closeCallback = self.closeCallback else { return }
+        closeCallback()
+        dismiss(animated: false)
     }
     
     @IBAction func replayBtnAction(_ sender: UIButton) {
-        dismiss(animated: true) {
-            guard let replayCallback = self.replayCallback else { return }
-            replayCallback()
-        }
+        guard let replayCallback = self.replayCallback else { return }
+        replayCallback()
+        dismiss(animated: false)
     }
     
     @IBAction func nextBtnAction(_ sender: UIButton) {
-        dismiss(animated: true) {
-            guard let nextEpisodeCallback = self.nextEpisodeCallback else { return }
-            nextEpisodeCallback()
-        }
+        guard let nextEpisodeCallback = self.nextEpisodeCallback else { return }
+        nextEpisodeCallback()
+        dismiss(animated: true)
     }
     
 }

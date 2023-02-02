@@ -18,7 +18,14 @@ class CameraViewController: BaseViewController {
     var previewLayer : AVCaptureVideoPreviewLayer!
     var stillImageOutput = AVCapturePhotoOutput()
     var isFromEpisodeDrwan:Bool = false
+    private var player: AVPlayer?
+
     
+    enum isSoundPlayFor {
+        case NOT_ERROR
+        case ERROR
+    }
+
     //MARK: - OUTLETS
     @IBOutlet weak var closeBtn: UIButton!
     @IBOutlet weak var captureBtn: UIButton!
@@ -35,16 +42,22 @@ class CameraViewController: BaseViewController {
         let backImage = UIImage(named: "close", in: Bundle(for: type(of: self)), compatibleWith: nil)?.imageWithColor(color: .systemTeal)
         closeBtn.setImage(backImage, for: .normal)
         closeBtn.setImage(backImage, for: .highlighted)
+        playSound()
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("PLAY_CAMERA_DEFUALT_SOUND"), object: nil, queue: .main) { _ in
+            self.playSound()
+        }
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("STOP_CAMERA_DEFUALT_SOUND"), object: nil, queue: .main) { _ in
+            self.stopPlayer()
+        }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        DispatchQueue.main.async {
-            self.setupAndStartCaptureSession()
-        }
+    override func viewWillAppear(_ animated: Bool) {
+        setupAndStartCaptureSession()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         captureSession.stopRunning()
+        stopPlayer()
     }
     
     static func FromStoryBoard() -> Self {
@@ -54,10 +67,14 @@ class CameraViewController: BaseViewController {
     
     //MARK: - BTNS ACTIONS
     @IBAction func closeBtnAction(_ sender: UIButton) {
+        stopPlayer()
         self.navigationController?.popToViewController(ofClass: VideoPlayerViewController.self)
     }
     
     @IBAction func captureBtnAction(_ sender: UIButton) {
+        DispatchQueue.main.async { [self] in
+            stopPlayer()
+        }
         #if targetEnvironment(simulator)
             if let image = UIImage(named: "testing", in: Bundle(for: type(of: self)), compatibleWith: nil) {
                 Common.saveImageInTemporaryDirectory(image: image, withName: "test.jpg") { url in
@@ -65,12 +82,7 @@ class CameraViewController: BaseViewController {
                         let loadingVC = LoadingViewController.FromStoryBoard()
                         loadingVC.loadingTitle = "detecting_your_drawing".localized
                         loadingVC.captureImage = url
-                        loadingVC.extractImageGet = { model in
-                            loadingVC.popViewController(animated: false)
-                            let extractionOKVC = ExtractionOKViewController.FromStoryBoard()
-                            extractionOKVC.extractedImageModel = model
-                            self.pushViewController(view: extractionOKVC)
-                        }
+                        loadingVC.originalImage = image
                         self.pushViewController(view: loadingVC)
                     }
                 }
@@ -141,20 +153,51 @@ extension CameraViewController : AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         guard let imageData = photo.fileDataRepresentation(), let image = UIImage(data: imageData)
         else { return }
-        Common.saveImageInTemporaryDirectory(image: image.resize(targetSize: CGSize(width: 500, height: 500)).rotate().rotate(radians: .pi), withName: UUID().uuidString+".jpg") { url in
+        Common.saveImageInTemporaryDirectory(image: image.resize(targetSize: CGSize(width: self.overlayIma.frame.size.width, height: self.overlayIma.frame.size.height)).rotate().rotate(radians: .pi), withName: UUID().uuidString+".jpg") { url in
             if let url = url {
                 let loadingVC = LoadingViewController.FromStoryBoard()
                 loadingVC.loadingTitle = "detecting_your_drawing".localized
                 loadingVC.captureImage = url
-                loadingVC.extractImageGet = { model in
-                    loadingVC.popViewController(animated: false)
-                    let extractionOKVC = ExtractionOKViewController.FromStoryBoard()
-                    extractionOKVC.extractedImageModel = model
-                    self.pushViewController(view: extractionOKVC)
+                loadingVC.originalImage = image
+                loadingVC.extractImageGet = { response in
+                    if response == nil {
+                        self.playSound(isPlayFor: CameraViewController.isSoundPlayFor.ERROR)
+                    }
                 }
                 self.pushViewController(view: loadingVC)
             }
         }
+    }
+    
+}
+
+extension CameraViewController {
+
+    func playSound(isPlayFor: isSoundPlayFor =  CameraViewController.isSoundPlayFor.NOT_ERROR) {
+        stopPlayer()
+        player = nil
+        var fileName: String? = nil
+        switch WakatoonSDKData.shared.selectedLanguage {
+            case .en:
+                fileName = nil
+            case .fr:
+                fileName = isPlayFor == .NOT_ERROR ? "fr_aim_at_your_drawing" : "fr_drawing_not_detected"
+        }
+        if fileName == nil {
+            return
+        }
+        if let bundle = Bundle(identifier: WakatoonSDKData.shared.BundelID), let url = bundle.url(forResource: fileName!, withExtension: "wav") {
+            player = AVPlayer(url: url)
+            self.player?.play()
+        }
+    }
+    
+    func stopPlayer() {
+        player?.pause()
+        player = nil
+        player = AVPlayer()
+        player?.replaceCurrentItem(with: nil)
+        player = nil
     }
     
 }
@@ -192,4 +235,25 @@ extension CameraViewController {
         }
     }
     
+}
+
+extension UIImageView {
+    var contentClippingRect: CGRect {
+        guard let image = image else { return bounds }
+        guard contentMode == .scaleAspectFit else { return bounds }
+        guard image.size.width > 0 && image.size.height > 0 else { return bounds }
+
+        let scale: CGFloat
+        if image.size.width > image.size.height {
+            scale = bounds.width / image.size.width
+        } else {
+            scale = bounds.height / image.size.height
+        }
+
+        let size = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+        let x = (bounds.width - size.width) / 2.0
+        let y = (bounds.height - size.height) / 2.0
+
+        return CGRect(x: x, y: y, width: size.width, height: size.height)
+    }
 }

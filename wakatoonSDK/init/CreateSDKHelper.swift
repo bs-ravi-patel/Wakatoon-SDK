@@ -9,7 +9,6 @@
 //MARK: - CREATE A SDK -
 
 /*
-  -------- iphoneos -- not in use
  
  xcodebuild archive \
  -scheme wakatoonSDK \
@@ -37,35 +36,4 @@
  -output ./WakatoonSDK.xcframework
  
  
- 
- -framework ./wakatoonSDK-Ipad.xcarchive/Products/Library/Frameworks/wakatoonSDK.framework \
- -framework ./wakatoonSDK--Ipad-Sim.xcarchive/Products/Library/Frameworks/wakatoonSDK.framework \
- 
- xcodebuild archive \
- -scheme wakatoonSDK \
- -destination "generic/platform=iPadOS" \
- -archivePath ../output/wakatoonSDK-Ipad \
- SKIP_INSTALL=NO \
- BUILD_LIBRARY_FOR_DISTRIBUTION=YES
- 
- 
- xcodebuild archive \
- -scheme wakatoonSDK \
- -destination "generic/platform=iPadOS Simulator" \
- -archivePath ../output/wakatoonSDK-Ipad-Sim \
- SKIP_INSTALL=NO \
- BUILD_LIBRARY_FOR_DISTRIBUTION=YES
- 
  */
-
-
-//MARK: - INITIALIZER OF SDK -
-
-/*
-
- WakatoonManager.shared.setupSDK(CLIENT_ID: "", API_KEY: "JJkc8KaGCH74saWE0smP28oR6LvUpmiEtOjCDsQd", window: self.window ?? UIWindow())
- 
- */
-
-//MARK: - -
-

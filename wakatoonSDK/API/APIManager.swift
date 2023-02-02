@@ -12,13 +12,13 @@ import UIKit
 class APIManager: NSObject {
     
     static let shared = APIManager()
-    private let BaseURL = "https://jbmudp882m.execute-api.eu-west-1.amazonaws.com/production"
+    private let BaseURL = "https://api.wakatoon.com/waas/"
     enum Endpoints: String {
-        case artwork            = "/waas/episode/artwork"
-        case overlay            = "/waas/ui/episode/overlay"
-        case extract            = "/waas/artwork/extract"
-        case extractValidate    = "/waas/photo/validate"
-        case getVideo           = "/waas/stream/link"
+        case artwork            = "episode/artwork"
+        case overlay            = "ui/episode/overlay"
+        case extract            = "artwork/extract"
+        case extractValidate    = "photo/validate"
+        case getVideo           = "stream/link"
     }
     enum ValidationStatus {
         case Yes
@@ -46,18 +46,27 @@ class APIManager: NSObject {
     }
     
     //MARK: - EXTRACT IMAGE
-    public func getExtractedImage(image: URL, completion: @escaping((_ response: Data?, _ error: Error?)->())) {
-        if let url = URL(string: self.BaseURL + Endpoints.extract.rawValue) {
-            let parameters = [
-                ["key": "userId", "value": "\(WakatoonSDKData.shared.USER_ID)", "type": "text"],
-                ["key": "profileId", "value": "\(WakatoonSDKData.shared.PROFILE_ID)", "type": "text"],
-                ["key": "storyId", "value": "\(WakatoonSDKData.shared.currentStoryID)", "type": "text"],
-                ["key": "seasonId", "value": "\(WakatoonSDKData.shared.currentSeasonID)", "type": "text"],
-                ["key": "episodeId", "value": "\(WakatoonSDKData.shared.currentEpisodeID)", "type": "text"],
-                ["key": "photoFile","src": image.absoluteString, "type": "file"]] as [[String : Any]]
-            let boundary = generateBoundary()
-            let dataBody = getBodyData(parameters: parameters, boundary: boundary)
-            makePostRequest(url: url, dataBody: dataBody, boundary: boundary, completion: completion)
+    public func getExtractedImage(image: URL, originalImage: UIImage?, completion: @escaping((_ response: Data?, _ error: Error?)->())) {
+        if let url = URL(string: self.BaseURL + Endpoints.extract.rawValue), let uiImage = originalImage {
+                
+                let parameters = [
+                    ["key": "userId", "value": "\(WakatoonSDKData.shared.USER_ID)", "type": "text"],
+                    ["key": "profileId", "value": "\(WakatoonSDKData.shared.PROFILE_ID)", "type": "text"],
+                    ["key": "storyId", "value": "\(WakatoonSDKData.shared.currentStoryID)", "type": "text"],
+                    ["key": "seasonId", "value": "\(WakatoonSDKData.shared.currentSeasonID)", "type": "text"],
+                    ["key": "episodeId", "value": "\(WakatoonSDKData.shared.currentEpisodeID)", "type": "text"],
+                    ["key": "screenWidth", "value": "\(Int(UIScreen.main.bounds.size.height))", "type": "text"],
+                    ["key": "screenHeight", "value": "\(Int(UIScreen.main.bounds.size.width))", "type": "text"],
+                    ["key": "overlayDisplayOffsetX", "value": "\((UIScreen.main.bounds.size.width - (uiImage.size.width / UIScreen.main.scale) / 2.0))", "type": "text"],
+                    ["key": "overlayDisplayOffsetY", "value": "\((UIScreen.main.bounds.size.width - (uiImage.size.height / UIScreen.main.scale) / 2.0))", "type": "text"],
+                    ["key": "overlayDisplayWidth", "value": "\(uiImage.size.width)", "type": "text"],
+                    ["key": "overlayDisplayHeight", "value": "\(uiImage.size.height)", "type": "text"],
+                    ["key": "photoFile","src": image.absoluteString, "type": "file"]] as [[String : Any]]
+                let boundary = generateBoundary()
+                let dataBody = getBodyData(parameters: parameters, boundary: boundary)
+                makePostRequest(url: url, dataBody: dataBody, boundary: boundary, completion: completion)
+           
+           
         }
     }
     
@@ -78,11 +87,8 @@ class APIManager: NSObject {
     }
 
     //MARK: - GET OVERVIEW VIDEO
-    public func getVideo(isForceGen: Bool?, label: VideoLabel,name: String? = nil, completion: @escaping((_ response: Data?, _ error: Error?)->())) {
+    public func getVideo(label: VideoLabel,name: String? = nil, completion: @escaping((_ response: Data?, _ error: Error?)->())) {
         var urlStr = BaseURL + Endpoints.getVideo.rawValue + "?userId=\(WakatoonSDKData.shared.USER_ID)&profileId=\(WakatoonSDKData.shared.PROFILE_ID)&storyId=\(WakatoonSDKData.shared.currentStoryID)&seasonId=\(WakatoonSDKData.shared.currentSeasonID)&episodeId=\(WakatoonSDKData.shared.currentEpisodeID)&label=\(label.rawValue)&language=fr"
-        if let isForceGen = isForceGen {
-            urlStr += "&forceVideoGeneration=\(isForceGen)"
-        }
         if let name = name {
             urlStr += "&firstName=\(name)"
         }

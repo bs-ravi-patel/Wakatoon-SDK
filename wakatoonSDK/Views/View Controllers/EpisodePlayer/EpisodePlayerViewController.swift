@@ -18,12 +18,14 @@ class EpisodePlayerViewController: BaseViewController {
     
     //MARK: - VARIABLES
     var videoUrlStr = String()
-    var player: AVPlayer?
+    private var player: AVPlayer?
+    private var playerLayer: AVPlayerLayer?
     var isEpisodeDrwan:Bool = false
     var isStrartPlaying: Bool = false
     var isRetakeImage: Bool = false
     var downloadedVideoURLString: String? = nil
     private let playerPlayingOvserver = "rate"
+    var isSetOnlyUserName: Bool = true
     
     //MARK: - OUTLETS
     @IBOutlet weak var backBtn: UIButton!
@@ -35,11 +37,19 @@ class EpisodePlayerViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupPlayer()
         setupTapGesture()
         backBtn.setBackButtonLayout(viewController: self)
         backBtn.alpha = 0
-        EpisodeDrawnModel().setEpisodeDrawn(true)
+        setupView()
+        if isSetOnlyUserName, let userName = Common.getPreviousName() {
+            VideoCatchModel(userName: userName).saveCatchVideo(.EPISODE_DATA, loopTimecode: nil)
+        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        DispatchQueue.main.async { [self] in
+            playerLayer?.frame = playerContainerView.bounds
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -52,8 +62,18 @@ class EpisodePlayerViewController: BaseViewController {
         return  EpisodePlayerViewController(nibName: "EpisodePlayerViewController", bundle: Bundle(for: EpisodePlayerViewController.self)) as! Self
     }
     
+    private func setupView() {
+        setupPlayer()
+        if isSetOnlyUserName {
+            DispatchQueue.global(qos: .background).asyncAfter(deadline: .now()+5, execute: {
+                self.downloadVideo(urlString: self.videoUrlStr)
+            })
+        }
+    }
+    
     //MARK: - BTNS ACTIONS
     @IBAction func backBtnAction(_ sender: UIButton) {
+        WakatoonSDKData.shared.delegate.videoPlaybackStopped()
         removePlayerNotifations()
         WakatoonSDKData.shared.nextEpisodeDelegate?.backFromEpisode()
     }
@@ -62,10 +82,12 @@ class EpisodePlayerViewController: BaseViewController {
     private func setupPlayer() {
         guard let url = URL(string: videoUrlStr) else {return}
         player = AVPlayer(url: url)
-        let playerLayer = AVPlayerLayer(player: player)
-        playerContainerView.layer.addSublayer(playerLayer)
-        playerLayer.frame = playerContainerView.bounds
-        playerLayer.videoGravity = .resizeAspect
+        playerLayer?.removeFromSuperlayer()
+        playerLayer = AVPlayerLayer(player: player)
+        playerContainerView.layer.addSublayer(playerLayer ?? AVPlayerLayer())
+        playerLayer?.frame = playerContainerView.frame
+        playerLayer?.frame.origin = .zero
+        playerLayer?.videoGravity = .resizeAspect
         player?.addObserver(self, forKeyPath: playerPlayingOvserver, options: [], context: nil)
         player?.play()
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player?.currentItem, queue: .main) { _ in
@@ -117,16 +139,43 @@ class EpisodePlayerViewController: BaseViewController {
     private func gotoReplayAndSharePopup() {
         let replayAndShareVC = ReplayAndShareViewController.FromStoryBoard()
         replayAndShareVC.replayCallback = {
-            self.player?.seek(to: CMTime.zero)
-            self.player?.play()
+            let result = VideoCatchModel().isVideoCatched(.EPISODE_DATA)
+            if result.0, let url = result.1 {
+                self.videoUrlStr = url
+                self.setupPlayer()
+            } else {
+                self.player?.seek(to: CMTime.zero)
+                self.player?.play()
+            }
         }
         replayAndShareVC.nextEpisodeCallback = {
             self.removePlayerNotifations()
             WakatoonSDKData.shared.nextEpisodeDelegate?.playNextEpisode()
         }
+        replayAndShareVC.closeCallback = {
+            self.navigationController?.popToViewController(ofClass: VideoPlayerViewController.self)
+        }
         replayAndShareVC.modalPresentationStyle = .overFullScreen
         replayAndShareVC.modalTransitionStyle = .crossDissolve
         present(replayAndShareVC, animated: true)
+    }
+    
+    private func downloadVideo(urlString: String) {
+        guard let url = URL(string: videoUrlStr) else {return}
+        DownloadManager(name: UUID().uuidString, url: url).download { percent in
+            if WakatoonSDKData.shared.isDebugEnable {
+                print("download percent",percent)
+            }
+        }.finish { (relativePath) in
+            let savedVideoString = WakatoonSDKData.shared.homeDirectoryURL.absoluteString + relativePath
+            VideoCatchModel(savedURLString: savedVideoString).saveCatchVideo(.EPISODE_DATA, loopTimecode: nil)
+        }.onError { (error) in
+            DispatchQueue.main.asyncAfter(deadline: .now()+5, execute: {
+                if self.navigationController?.topViewController == self {
+                    self.downloadVideo(urlString: urlString)
+                }
+            })
+        }
     }
     
 }

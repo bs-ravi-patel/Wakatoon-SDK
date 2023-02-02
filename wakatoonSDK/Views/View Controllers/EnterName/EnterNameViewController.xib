@@ -12,6 +12,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EnterNameViewController" customModule="wakatoonSDK" customModuleProvider="target">
             <connections>
                 <outlet property="cancleBtn" destination="QB7-ef-4Fs" id="jfV-bU-z4S"/>
+                <outlet property="centerContraint" destination="4IL-5l-I2r" id="vhB-ua-3xF"/>
                 <outlet property="continueBtn" destination="giI-k0-u7B" id="L3Q-4v-tI2"/>
                 <outlet property="nameTF" destination="f8i-D6-ys5" id="bs8-K7-gRO"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
